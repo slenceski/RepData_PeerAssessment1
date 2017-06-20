@@ -8,14 +8,14 @@ The project requires the folowing:
 
 Commit a single R markdown file to a forked github account containing:
 
-1 Code for reading in the dataset and/or processing the data  
-2.Histogram of the total number of steps taken each day  
-3.Mean and median number of steps taken each day  
-4.Time series plot of the average number of steps taken  
-5.The 5-minute interval that, on average, contains the maximum number of steps  
-6.Code to describe and show a strategy for imputing missing data  
-7.Histogram of the total number of steps taken each dayafter missing values are imputed  
-8.Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends  
+1. Code for reading in the dataset and/or processing the data  
+2. Histogram of the total number of steps taken each day  
+3. Mean and median number of steps taken each day  
+4. Time series plot of the average number of steps taken  
+5. The 5-minute interval that, on average, contains the maximum number of steps  
+6. Code to describe and show a strategy for imputing missing data  
+7. Histogram of the total number of steps taken each dayafter missing values are imputed  
+8. Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends  
 9. All of the R code needed to reproduce the results (numbers, plots, etc.) in the report  
 
 ## Loading and preprocessing the data
@@ -36,7 +36,7 @@ mydata <- cbind(mydata, time)
 ```
 
 ## What is mean total number of steps taken per day?
-**note: for this part of the assignment, one can ignore missing value**
+**Note: For this part of the assignment, one can ignore missing values**
 
 *Step 1: Calculate the total number of steps taken per day.*
 
@@ -49,7 +49,7 @@ dailytotal <- tapply(mydata$steps, mydata$date, sum, na.rm = TRUE)
 
 
 ```r
-hist(dailytotal, breaks = 25)
+hist(dailytotal, breaks = 25, main = "Histogram of Average Daily Steps")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)
@@ -86,7 +86,7 @@ Then plot it
 
 
 ```r
-plot(dayavg, type ="l", xlab = "Time", xaxt = "n", main = "Average Steps Taken", ylab = "Steps")
+plot(dayavg, type ="l", xlab = "Time", xaxt = "n", main = "Average Steps Taken Throughout Day", ylab = "Steps")
 axis(1, at = seq(0, 287, by = 36), lab =names(dayavg[seq(1,288, by = 36)]))
 ```
 
@@ -121,34 +121,33 @@ sum(is.na(mydata$steps))
 This is out of 17,568 observations. So the percentage of missing data, would be:
 
 ```r
-mean(is.na(mydata$steps))
+mean(is.na(mydata$steps)) *100
 ```
 
 ```
-## [1] 0.1311475
+## [1] 13.11475
 ```
 
 *Part 2:Devise a strategy for filling in the missing values*
 
-steps: 
-1. create vector of positions of NA using which() and the is.na() functions
+Step 1: Create vector of positions of NA using which() and the is.na() functions
 
 ```r
 indexvector <- which(is.na(mydata$steps))
 ```
-2. FInd times at each position
+Step 2: FInd times corresponding to each NA position
 
 ```r
 indextimes <- mydata$time[which(is.na(mydata$steps))]
 ```
-3. find average time from dayavg
+Step 3. Find average time from dayavg
 
 ```r
 indextimeavg <- dayavg[mydata$time[which(is.na(mydata$steps))]]
 ```
 4.Use the replace() function 
 
-*Part 3: create a new data set with values replaced*
+*Part 3: Create a new data set with values replaced*
 
 ```r
 steps_nafree <- replace(mydata$steps,indexvector,indextimeavg)
